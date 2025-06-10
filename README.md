@@ -1,23 +1,24 @@
-# 섹션2. 프로젝트 환경설정
-## 스프링 부트 라이브러리
-    - spring-boot-starter-web
-        - spring-boot-starter-tomcat: 톰캣(웹서버)
-        - spring-webmvc: 스프링 웹 MVC
-    - spring-boot-starter-thymeleaf: 타임리프 템플릿 엔진(View) -> HTML 기반의 웹 화면을 쉽게 만들 수 있음
-    - spring-boot-starter(공통): 스프링 부트 + 스프링 코어 + 로킹
-        - spring-boot
-            - spring-core
-        - spring-boot-starter-logging
-            - logback, slf4j
+# 스프링 완전 정복
+## 섹션2. 프로젝트 환경설정
+### 스프링 부트 라이브러리
+- spring-boot-starter-web
+    - spring-boot-starter-tomcat: 톰캣(웹서버)
+    - spring-webmvc: 스프링 웹 MVC
+- spring-boot-starter-thymeleaf: 타임리프 템플릿 엔진(View) -> HTML 기반의 웹 화면을 쉽게 만들 수 있음
+- spring-boot-starter(공통): 스프링 부트 + 스프링 코어 + 로킹
+    - spring-boot
+        - spring-core
+    - spring-boot-starter-logging
+        - logback, slf4j
 
-## 테스트 라이브러리
+### 테스트 라이브러리
     - spring-boot-starter-test
         - junit: 테스트 프레임워크
         - mockito: 목 라이브러리
         - assertj: 테스트 코드를 좀 더 편하게 작성하게 도와주는 라이브러리
         - spring-test: 스프링 통합 테스트 지원
 
-## 퀴즈
+### 퀴즈
     1. start.spring.io는 주로 어떤 목적으로 사용될까요?
         A: Spring Boot 프로젝트 생성
 
@@ -37,4 +38,4 @@
         A: 다양한 로그 레벨 및 파일 관리 용이
         => 메시지 중요도(레벨), 출력 위치(콘솔, 파일) 설정 등 System.out.println보다 훨씬 다양한 기능을 제공
 
-# 섹션3. 스프링 웹 개발 기초
+## 섹션3. 스프링 웹 개발 기초
