@@ -112,4 +112,4 @@ static class Hello {
     A: HTTP 메시지 컨버터 (HTTP Message Converter)<br>
     => @ResponseBody가 붙으면 뷰 리졸버 대신 HTTP 메시지 컨버터가 동작하여 객체를 JSON 등으로 변환해 응답 본문에 담아줌
 
-## 섹션 5. 스프링 빈과 의존관계
+## 섹션 4. 회원 관리 예제 - 백엔드 개발
