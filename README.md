@@ -113,3 +113,87 @@ static class Hello {
     => @ResponseBody가 붙으면 뷰 리졸버 대신 HTTP 메시지 컨버터가 동작하여 객체를 JSON 등으로 변환해 응답 본문에 담아줌
 
 ## 섹션 4. 회원 관리 예제 - 백엔드 개발
+~~~java
+public class MemberService {
+    private final MemberRepository memberRepository;
+
+    /**
+    * 생성자 주입
+    * 생성자를 통해 MemberRepository 구현체를 주입받음으로써,
+    * MemberService는 구체적인 구현체에 의존하지 않고, 인터페이스에만 의존함
+    */
+    public MemberService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+}
+~~~
+- 왜 생성자 주입을 쓰는지?
+    - MemberService는 MemberRepository가 있어야 동작함
+    - 어떤 구현체를 사용할지는 외부(스프링, 테스트 코드 등)에서 결정해줌
+    - 이걸 의존성 주입 (Dependency Injection, DI) 라고 부름
+
+### DI(Dependency Injection)란?
+- 의존성 주입
+    - "필요한 의존성(Dependency)을 외부에서 주입(Injection) 해준다"는 뜻
+    - 어떤 클래스가 다른 객체를 사용할 때, 그 객체를 내부에서 직접 만들지 않고 외부에서 만들어서 넣어 주는 것
+
+#### DI를 안 쓴 경우
+~~~java
+public class MemberService {
+    private final MemberRepository memberRepository = new MemoryMemberRepository();
+}
+~~~
+- MemberService가 스스로 MemoryMemberRepository를 만듦
+- 만약 DB로 바꾸려면 코드를 수정해야 함
+
+#### DI를 쓴 경우
+~~~java
+public class MemberService {
+    private final MemberRepository memberRepository;
+
+    public MemberService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+}
+~~~
+- MemberRepository는 외부에서 주입됨
+- DB 구현체, 메모리 구현체 어떤 것이든 외부에서 골라서 넣어줄 수 있음
+
+### 왜 DI를 사용해야 하는지?
+1. 유연성(확장성)
+    - 저장소가 Memory -> DB -> JPA -> 외부 API 등 바뀔 때 서비스 코드 안 건드려도 됨. 구현체만 바꾸면 됨
+
+2. 테스트가 쉬워짐
+    - 테스트할 때 가짜 저장소를 만들어서 넣어줄 수 있음
+~~~java
+MemberRepository fakeRepository = new MemoryMemberRepository();
+MemberService service = new MemberService(fakeRepository);
+~~~
+
+3. 결합도 낮춤
+    - 코드끼리 덜 얽히고, 각자의 역할이 분리됨
+    - 한 부분이 바뀌어도 다른 부분에 영향 적음
+
+4. 스프링이 자동으로 관리해줌
+    - 스프링은 DI를 지원해서 객체 생성 -> 주입 -> 관리 -> 소멸까지 자동으로 해줌
+
+### 퀴즈
+1. 애플리케이션 개발 시 비즈니스 핵심 로직(예: 중복 회원 확인)을 주로 담당하는 계층은 무엇일까요?
+    A: 서비스(Service)<br>
+    => 서비스 계층은 애플리케이션의 핵심 비즈니스 규칙을 구현함. 사용자의 요청을 처리하기 위해 리포지토리 등을 활용함. 컨트롤러는 요청을 받고, 리포지토리는 데이터 접근을 담당함
+
+2. 데이터 저장 방식이 아직 결정되지 않은 상황에서, 리포지토리 구현체의 변경에 유연하게 대처하기 위한 설계 방식은 무엇인가요?
+    A: 리포지토리 인터페이스를 정의하고, 임시 구현체(예: 메모리)를 사용함<br>
+    => 리포지토리를 인터페이스로 추상화하면, 실제 데이터 저장 기술(DB, JPA 등)이 나중에 결정되어도 인터페이스를 구현하는 다른 클래스로 쉽게 교체할 수 있음. 초기엔 메모리 구현체를 활용하기도 함
+
+3. JUnit 테스트 케이스 작성 시, 여러 테스트 메서드가 실행될 때 각 테스트가 서로 독립적으로 동작하게 만들기 위한 방법은 무엇인가요?
+    A: 테스트 실행 후 공유 데이터를 정리(clear)하는 코드를 추가함<br>
+    => 테스트는 실행 순서와 관계없이 독립적이어야 함. 이전 테스트의 결과(공유 데이터)가 다음 테스트에 영향을 주지 않도록, 각 테스트 실행 전/후에 데이터를 정리하는 작업이 중요함
+
+4. 서비스 계층과 리포지토리 계층의 역할 및 이름 부여 방식에 대한 설명 중 적절하지 않은 것은 무엇일까요?
+    A: 서비스 계층이 복잡한 데이터 입출력 로직을 주로 담당함<br>
+    => 리포지토리는 데이터 접근(저장, 조회 등)에 집중하며, 서비스 계층은 리포지토리를 활용하여 비즈니스 로직을 수행함. 복잡한 비즈니스 로직은 서비스 계층의 역할임
+
+5. 서비스 객체가 자신이 의존하는 리포지토리 객체의 구현체를 직접 생성하지 않고, 외부(설정 등)에서 전달받아 사용하는 설계 방식을 무엇이라고 하나요?
+    A: 의존성 주입(Dependency Injection)<br>
+    => 코드의 재사용성을 높이고 테스트하기 쉽게 만들어 줌
