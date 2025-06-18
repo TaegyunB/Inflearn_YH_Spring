@@ -265,7 +265,6 @@ public class SpringConfig {
     => 메모리는 휘발성이므로 애플리케이션이 종료되거나 재시작되면 저장했던 모든 데이터가 사라짐. 영구 저장을 위해선 DB가 필요함
 
 ## 섹션 7. 스프링 DB 접근 기술
-JDBC
 ### H2 데이터베이스 설치
 1. https://www.h2database.com -> 다운로드 및 설치
 2. h2 폴더 -> bin 폴더 들어가서 권한 주기: chmod 755 h2.sh
@@ -277,3 +276,22 @@ JDBC
 5. 테이블 관리를 위해 프로젝트 루트에 sql/ddl.sql 파일 생성
 
 ### 순수 JDBC
+#### 환경 설정
+- build.gradle 파일에 jdbc, h2 데이터베이스 관련 라이브러리 추가
+~~~
+implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+runtimeOnly 'com.h2database:h2'
+~~~
+
+- 스프링 부트 데이터베이스 연결 설정 추가
+~~~
+resources/application.properties
+
+spring.datasource.url=jdbc:h2:tcp://localhost/~/test
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.username=sa
+~~~
+
+### 스프링 통합 테스트
+@SpringBootTest: 스프링 컨테이너와 테스트를 함께 실행함
+@Transactional: 테스트 케이스에 이 어노테이션이 있으면, 테스트 시작 전에 트랜잭션을 시작하고, 테스트 완료 후에 항상 롤백함. 이렇게 하면 DB에 데이터가 남지 않으므로 다음 테스트에 영향을 주지 않음
