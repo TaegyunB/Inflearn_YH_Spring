@@ -321,7 +321,7 @@ dependencies {
 <br>
 <strong>스프링 부트에 JPA 설정 추가</strong>
 
-
+~~~
 resources/application.properties
 
 spring.datasource.url=jdbc:h2:tcp://localhost/~/test
