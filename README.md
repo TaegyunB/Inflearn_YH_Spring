@@ -354,3 +354,41 @@ public class Member {
 - @GeneratedValue
     - 기본 키를 어떻게 생성할지 JPA에게 알려주는 설정
     - GenerationType.IDENTITY는 DB가 기본 키 값을 자동으로 생성하도록 위임하는 전략
+
+### 스프링 데이터 JPA
+**JpaRepository란?**
+- Spring Data JPA가 제공하는 인터페이스로, 기본적인 CRUD(Create, Read, Update, Delete) 기능을 자동으로 만들어주는 인터페이스
+- JpaRepository를 상속하기만 하면 DB 접근 코드를 직접 작성하지 않아도 됨
+
+#### 구조
+~~~java
+public interface MemberRepository extends JpaRepository<Member, Long> {
+    Optional<Member> findByName(String name);  // 이름으로 회원을 찾고 싶으면 메서드 이름만 findBy필드명으로 작성하면 Spring이 자동으로 구현해줌
+}
+~~~
+- Member: 엔티티 클래스
+- Long: 기본 키(PK)의 타입
+
+#### 예제
+~~~java
+@Service
+public class MemberService {
+    private final MemberRepository memberRepository;
+
+    public MemberService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+
+    public void join(Member member) {
+        memberRepository.save(member);  // 저장
+    }
+
+    public Optional<Member> find(Long id) {
+        return memberRepository.findById(id);  // 조회
+    }
+
+    public List<Member> findAll() {
+        return memberRepository.findAll();  // 전체 목록 조회
+    }
+}
+~~~
