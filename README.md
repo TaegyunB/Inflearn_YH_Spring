@@ -303,7 +303,7 @@ spring.datasource.username=sa
 - JPA를 사용하면 개발 생산성을 크게 높일 수 있음
 <br>
 <strong>build.gradle 파일에 JPA, h2 데이터베이스 관련 라이브러리 추가</strong>
-~~~
+```
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -313,7 +313,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
-~~~
+```
+
 - spring-boot-starter-data-jpa는 내부에 jdbc 관련 라이브러리를 포함하고 있어서 jdbc는 제거해도 됨
 <br>
 <strong>스프링 부트에 JPA 설정 추가</strong>
@@ -331,14 +332,14 @@ spring.jpa.hibernate.ddl-auto=none
 - ddl-auto: JPA는 테이블을 자동으로 생성하는 기능을 제공하는데 none을 사용하면 해당 기능을 끔
     - create를 사용하면 엔티티 정보를 바탕으로 테이블도 직접 생성해줌
 
-~~~java
+```java
 @Entity
 public class Member {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 }
-~~~
+```
 - @Entity
     - 이 클래스가 JPA에서 관리되는 엔티티 클래스임을 나타냄
     - 즉, 이 클래스는 데이터베이스의 테이블과 매핑되는 자바 클래스라는 뜻
