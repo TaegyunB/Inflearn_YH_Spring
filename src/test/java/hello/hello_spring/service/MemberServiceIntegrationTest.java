@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,6 +22,7 @@ class MemberServiceIntegrationTest {
     @Autowired MemberRepository memberRepository;  // 실제 DB 없이 메모리로 회원 저장 (테스트용)
 
     @Test
+//    @Commit  // 데이터베이스에 등록이 됨
     void 회원가입() {
         // given(뭔가가 주어줬을 때)
         Member member = new Member();

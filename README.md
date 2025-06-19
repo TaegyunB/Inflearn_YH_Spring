@@ -277,13 +277,13 @@ public class SpringConfig {
 
 ### 순수 JDBC
 #### 환경 설정
-- build.gradle 파일에 jdbc, h2 데이터베이스 관련 라이브러리 추가
+<strong>build.gradle 파일에 jdbc, h2 데이터베이스 관련 라이브러리 추가</strong>
 ~~~
 implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 runtimeOnly 'com.h2database:h2'
 ~~~
 
-- 스프링 부트 데이터베이스 연결 설정 추가
+<strong>스프링 부트 데이터베이스 연결 설정 추가</strong>
 ~~~
 resources/application.properties
 
@@ -296,7 +296,57 @@ spring.datasource.username=sa
 - @SpringBootTest: 스프링 컨테이너와 테스트를 함께 실행함
 - @Transactional: 테스트 케이스에 이 어노테이션이 있으면, 테스트 시작 전에 트랜잭션을 시작하고, 테스트 완료 후에 항상 롤백함. 이렇게 하면 DB에 데이터가 남지 않으므로 다음 테스트에 영향을 주지 않음
 
-### JPA
+### JPA(Java Persistence API)
+- 자바 객체와 데이터베이스 테이블을 연결(매핑) 해주는 자바의 표준 ORM 기술
 - JPA는 기존의 반복 코드는 물론이고, 기본적인 SQL도 JPA가 직접 만들어서 실행해줌
 - JPA를 사용하면 SQL과 데이터 중심의 설계에서 객체 중심의 설계로 패러다임을 전환을 할 수 있음
 - JPA를 사용하면 개발 생산성을 크게 높일 수 있음
+<br>
+<strong>build.gradle 파일에 JPA, h2 데이터베이스 관련 라이브러리 추가</strong>
+~~~
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+//	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtimeOnly 'com.h2database:h2'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+~~~
+- spring-boot-starter-data-jpa는 내부에 jdbc 관련 라이브러리를 포함하고 있어서 jdbc는 제거해도 됨
+<br>
+<strong>스프링 부트에 JPA 설정 추가</strong>
+~~~
+resources/application.properties
+
+spring.datasource.url=jdbc:h2:tcp://localhost/~/test
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.username=sa
+
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=none
+~~~
+- show-sql: JPA가 생성하는 SQL을 출력함
+- ddl-auto: JPA는 테이블을 자동으로 생성하는 기능을 제공하는데 none을 사용하면 해당 기능을 끔
+    - create를 사용하면 엔티티 정보를 바탕으로 테이블도 직접 생성해줌
+
+~~~java
+@Entity
+public class Member {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+}
+~~~
+- @Entity
+    - 이 클래스가 JPA에서 관리되는 엔티티 클래스임을 나타냄
+    - 즉, 이 클래스는 데이터베이스의 테이블과 매핑되는 자바 클래스라는 뜻
+
+- @Id
+    - 필드가 기본 키(Primary Key) 역할을 한다는 의미
+    - DB 테이블에서 각 레코드를 구분하기 위한 고유한 값
+
+- @GeneratedValue
+    - 기본 키를 어떻게 생성할지 JPA에게 알려주는 설정
+    - GenerationType.IDENTITY는 DB가 기본 키 값을 자동으로 생성하도록 위임하는 전략
