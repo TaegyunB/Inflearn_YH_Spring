@@ -278,19 +278,21 @@ public class SpringConfig {
 ### 순수 JDBC
 #### 환경 설정
 <strong>build.gradle 파일에 jdbc, h2 데이터베이스 관련 라이브러리 추가</strong>
+
 ~~~
 implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 runtimeOnly 'com.h2database:h2'
 ~~~
 
 <strong>스프링 부트 데이터베이스 연결 설정 추가</strong>
-~~~
+
+```
 resources/application.properties
 
 spring.datasource.url=jdbc:h2:tcp://localhost/~/test
 spring.datasource.driver-class-name=org.h2.Driver
 spring.datasource.username=sa
-~~~
+```
 
 ### 스프링 통합 테스트
 - @SpringBootTest: 스프링 컨테이너와 테스트를 함께 실행함
@@ -301,8 +303,9 @@ spring.datasource.username=sa
 - JPA는 기존의 반복 코드는 물론이고, 기본적인 SQL도 JPA가 직접 만들어서 실행해줌
 - JPA를 사용하면 SQL과 데이터 중심의 설계에서 객체 중심의 설계로 패러다임을 전환을 할 수 있음
 - JPA를 사용하면 개발 생산성을 크게 높일 수 있음
-<br>
+
 <strong>build.gradle 파일에 JPA, h2 데이터베이스 관련 라이브러리 추가</strong>
+
 ```
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -314,11 +317,11 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 ```
-
 - spring-boot-starter-data-jpa는 내부에 jdbc 관련 라이브러리를 포함하고 있어서 jdbc는 제거해도 됨
 <br>
 <strong>스프링 부트에 JPA 설정 추가</strong>
-~~~
+
+
 resources/application.properties
 
 spring.datasource.url=jdbc:h2:tcp://localhost/~/test
